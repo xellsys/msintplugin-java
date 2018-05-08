@@ -1,0 +1,10 @@
+version: '2'
+services:
+
+  javahelloworld:
+    environment:
+      SERVICE_CHECK_HTTP: ':8080/actuator/health'
+    ports:
+    - '8080:8080'
+    - '5005:5005'
+    image: javahelloworld

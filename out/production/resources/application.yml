@@ -1,0 +1,40 @@
+server:
+  # specify port on which JERSEY should start the server (default: 8080)
+  port: 8080
+
+spring:
+
+  application:
+    name: paket-annahme
+
+  # configuration of the persistence
+  data:
+    # connection to central mongo db
+    mongodb:
+      # address of the central mongo server (default: localhost)
+      host: mongo
+      # port of the running mongo instance
+      port: 27017
+      database: room
+
+  # configuration of the message broker
+  rabbitmq:
+    # address of the HANDSON_SERVER on which RABBIT-MQ is running (default: localhost)
+    host: rabbitmq
+    # port ot the broker for sending/receiving messages
+    port: 5672
+
+endpoints:
+  health:
+    # enable detailed health output (/health)
+    sensitive: false
+  # prometheus endpoint config
+  prometheus:
+    id: prometheus
+    enabled: true
+    sensitive: true
+
+management:
+  security:
+    # enable detailed health output (/health)
+    enabled: false

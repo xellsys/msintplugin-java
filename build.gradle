@@ -1,0 +1,57 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.1.RELEASE'
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'de.db.vz:msintplugin:1.0.0-SNAPSHOT'
+    }
+}
+repositories.addAll(getBuildscript().getRepositories())
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'de.db.vz.msintplugin'
+
+group = 'xellsys.msintplugin.sample'
+version = '1.0'
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-starter-data-rest'
+
+    integrationTestCompile group: 'org.testng', name: 'testng', version: '6.14.3'
+}
+
+task buildDocker {
+    doLast {
+        exec {
+            commandLine 'mkdir', '-p', 'build/docker'
+        }
+        exec {
+            commandLine 'cp', '-r', 'src/main/docker/', 'build/docker'
+        }
+        exec {
+            commandLine 'cp', 'build/libs/msintplugin-groovy-1.0.jar', 'build/docker/msintplugin-groovy.jar'
+        }
+        exec {
+            commandLine 'docker', 'build', 'build/docker/', '-t', 'javahelloworld'
+        }
+    }
+}
+
+build.dependsOn buildDocker
+integrationTestUp.dependsOn build
